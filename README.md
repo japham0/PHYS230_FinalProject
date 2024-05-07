@@ -5,15 +5,6 @@ PHYS 230: Computational Modeling for the Biological and Interdisciplinary
 Sciences and Engineering. 
 
 
-## Table of Contents
-
-- [PHYS 230 Final Project: Continuum Modeling for Fluid Phase-Separation](#project-title)
-  - [Table of Contents](#table-of-contents)
-  - [Description](#description)
-  - [Usage](#usage)
-
-
-
 ## Description
 
 The goal of this project is to be able to model and visualize fluid phase-separation
@@ -25,11 +16,10 @@ phase separation, given an image of the system after Nt timesteps.
 
 ## Usage
 
-Each of the Matlab codes as well as the python script can be downloaded and run separately. 
-
-$$\int_{0}^{\infty} e^{-x^2} dx = \frac{\sqrt{\pi}}{2}$$
-
-
+1. cahnhillardstandard.m models the standard cahn hillard equation phase separation over time
+2. cahnhillardvortex.m models the cahn hillard equation with a vortex fluid flow added
+3. convergence_test.m shows that the laplacian operator converges with order 2 accuracy
+4. blobsize.ipynb prints the average size of a droplet given an image of the phase separation
 
 
 

@@ -5,15 +5,15 @@ clc; clear all; close all;
 % initial condition is a vector populated with random values between -1 and
 % 1, with a bias towards -1 (water). 
 
-Nx = 20;     % Grid dimensions
-L = 2;       % Domain [-1,1] x [-1,1]
-h = L / (Nx-1); % Space step
+%% Parameters
+Nx = 20;         % Number of space steps
+L = 2;           % Domain [-1,1] x [-1,1]
+h = L / (Nx-1);  % Space step
 
-Nt = 100000;     % Number of timesteps
+Nt = 800;        % Number of timesteps
 dt = 0.000001;   % Timestep (must be very small for stability)
 
-
-x = linspace(-1, 1, Nx);
+x = linspace(-1, 1, Nx);  % Set Domain
 y = linspace(-1, 1, Nx);
 [X, Y] = meshgrid(x,y);
 
@@ -22,34 +22,59 @@ A = make_A(Nx);  % Construct 2D Laplacian operator with periodic b.c's
 
 % Randomly initialize vector with values between -1 and 1, with 
 % bias towards -1 
-
-bias = 0.25; % larger value of bias means more biased towards -1
-u_init = (rand(Nx) * 2 - 1) - bias; 
-
+bias = 0.25;              % larger value means more biased towards -1
+u_init = (rand(Nx) * 2 - 1) - bias;
+u_init(u_init<(-1)) = -1; % to ensure we are between -1 and 1
 u_step = u_init(:);
 
-k = 0.01;  % surface tension (what units?)
-tau = 0.2;   % scaling factor  (what units?)
-delta = 0.1; % length of interface  (what units?)
+k = 0.02;       % surface tension mass/time^2
+tau = 1;        % density / time
+delta = 1.01;   % length of interface
 
 one = ones(length(u_step),1);
 
+% SAVE VIDEO TO LOCAL MACHINE
+vidfile = VideoWriter('testmovie.mp4','MPEG-4'); % Video Title
+set(vidfile,'FrameRate',60)
+open(vidfile);
+
+%% SOLVE SYSTEM
 % Forward Euler interation in time
 for t = 1:Nt
-    %u_new = u_step + (k*dt/tau)*(1/h^4)*A*(A*u_step - (1/delta^2)*u_step.*(1-u_step.^2));
     u_new = u_step + (k*dt/(delta^2 * tau*h^4)) * A * ((u_step.^3-u_step) - (delta^2)*A*u_step);
     u_step = u_new;
+    
+
+    % COMMENT OUT TO GET RID OF VIDEO
+    if mod(t,4)==0
+        % Plotting
+        u_plot = reshape(u_step, Nx, Nx);
+        figure(1)
+        pcolor(x,y,u_plot)
+        set(gcf,'color', 'w')
+        pbaspect([1,1,1])
+        grid off
+        xlabel("$x$", Interpreter='latex', fontsize=14)
+        ylabel("$y$", Interpreter='latex', fontsize=14)
+        xlim([-1,1])
+        ylim([-1,1])
+        drawnow
+
+        set(gca,'FontSize',20,'FontName','Times')
+        writeVideo(vidfile,getframe(gcf));
+    end
 end
+close(vidfile)
 
-% Plotting
-u_end = reshape(u_step, Nx, Nx);
-figure(1)
-pcolor(x,y,u_end)
-xlabel("x")
-ylabel("y")
+% UNCOMMENT FOR END-TIME PLOT
+% u_end = reshape(u_step, Nx, Nx);
+% figure(1)
+% pcolor(x,y,u_end)
+% xlabel("x")
+% ylabel("y")
 
 
-% Construct the 2D Laplacian with periodic boundary conditions
+%% Construct the 2D Laplacian with periodic boundary conditions
 function out = make_A(Nx)
 
 d = ones(Nx^2, 1);
