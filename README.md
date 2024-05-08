@@ -21,5 +21,8 @@ phase separation, given an image of the system after Nt timesteps.
 3. convergence_test.m shows that the laplacian operator converges with order 2 accuracy
 4. blobsize.ipynb prints the average size of a droplet given an image of the phase separation
 
+The comments throughout each of the scripts show which parameters can be modified, as well as
+how to save the video. 
+
 
 
