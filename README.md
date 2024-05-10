@@ -24,5 +24,7 @@ phase separation, given an image of the system after Nt timesteps.
 The comments throughout each of the scripts show which parameters can be modified, as well as
 how to save the video. 
 
+Link to the google slides: https://docs.google.com/presentation/d/1rw-hgde6OsET5OLxl3_T_Y97T54a2H8IqOylQnVS620/edit#slide=id.g26f50e7d422_0_16
+
 
 
